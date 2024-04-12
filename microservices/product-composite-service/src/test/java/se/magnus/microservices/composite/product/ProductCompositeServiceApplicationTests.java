@@ -13,7 +13,8 @@ import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.api.exceptions.NotFoundException;
 import se.magnus.microservices.composite.product.services.ProductCompositeIntegration;
 
-import static java.util.Collections.singletonList;
+import java.util.Arrays;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
@@ -27,6 +28,7 @@ class ProductCompositeServiceApplicationTests {
     private static final int PRODUCT_ID_INVALID = 0;
 
     @Autowired private WebTestClient client;
+
     @MockBean
     private ProductCompositeIntegration compositeIntegration;
 
@@ -35,21 +37,29 @@ class ProductCompositeServiceApplicationTests {
 
         when(compositeIntegration.getProduct(PRODUCT_ID_OK))
                 .thenReturn(new Product(PRODUCT_ID_OK, "name", 1, "mock-address"));
+
         when(compositeIntegration.getRecommendations(PRODUCT_ID_OK))
-                .thenReturn(singletonList(new Recommendation(PRODUCT_ID_OK, 1, "author", 1, "content", "mock address")));
+                .thenReturn(Arrays.asList(
+                    new Recommendation(PRODUCT_ID_OK, 1, "author", 1, "content", "mock address"),
+                    new Recommendation(PRODUCT_ID_OK, 1, "author", 1, "content", "mock address"),
+                    new Recommendation(PRODUCT_ID_OK, 1, "author", 1, "content", "mock address")
+                )
+         );
+
         when(compositeIntegration.getReviews(PRODUCT_ID_OK))
-                .thenReturn(singletonList(new Review(PRODUCT_ID_OK, 1, "author", "subject", "content", "mock address")));
+                .thenReturn(Arrays.asList(
+                    new Review(PRODUCT_ID_OK, 1, "author", "subject", "content", "mock address"),
+                    new Review(PRODUCT_ID_OK, 1, "author", "subject", "content", "mock address"),
+                    new Review(PRODUCT_ID_OK, 1, "author", "subject", "content", "mock address")
+                 )
+        );
 
         when(compositeIntegration.getProduct(PRODUCT_ID_NOT_FOUND))
-                .thenThrow(new NotFoundException("NOT FOUND: " + PRODUCT_ID_NOT_FOUND));
+                .thenThrow(new NotFoundException("No product found for productId: " + PRODUCT_ID_NOT_FOUND));
 
         when(compositeIntegration.getProduct(PRODUCT_ID_INVALID))
-                .thenThrow(new InvalidInputException("INVALID: " + PRODUCT_ID_INVALID));
+                .thenThrow(new InvalidInputException("Invalid productId: " + PRODUCT_ID_INVALID));
     }
-
-	@Test
-	void contextLoads() {
-	}
 
     @Test
     void getProductById() {
@@ -62,8 +72,8 @@ class ProductCompositeServiceApplicationTests {
                 .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody()
                 .jsonPath("$.productId").isEqualTo(PRODUCT_ID_OK)
-                .jsonPath("$.recommendations.length()").isEqualTo(1)
-                .jsonPath("$.reviews.length()").isEqualTo(1);
+                .jsonPath("$.recommendations.length()").isEqualTo(3)
+                .jsonPath("$.reviews.length()").isEqualTo(3);
     }
 
     @Test
@@ -77,7 +87,7 @@ class ProductCompositeServiceApplicationTests {
                 .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody()
                 .jsonPath("$.path").isEqualTo("/product-composite/" + PRODUCT_ID_NOT_FOUND)
-                .jsonPath("$.message").isEqualTo("NOT FOUND: " + PRODUCT_ID_NOT_FOUND);
+                .jsonPath("$.message").isEqualTo("No product found for productId: " + PRODUCT_ID_NOT_FOUND);
     }
 
     @Test
@@ -91,7 +101,7 @@ class ProductCompositeServiceApplicationTests {
                 .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody()
                 .jsonPath("$.path").isEqualTo("/product-composite/" + PRODUCT_ID_INVALID)
-                .jsonPath("$.message").isEqualTo("INVALID: " + PRODUCT_ID_INVALID);
+                .jsonPath("$.message").isEqualTo("Invalid productId: " + PRODUCT_ID_INVALID);
     }
 
 }
