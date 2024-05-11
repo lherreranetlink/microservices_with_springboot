@@ -12,7 +12,7 @@ java {
 }
 
 ext {
-	mapstructVersion = "1.4.2.Final"
+	mapstructVersion = "1.5.5.Final"
 }
 
 repositories {
