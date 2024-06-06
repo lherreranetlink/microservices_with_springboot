@@ -13,8 +13,6 @@ import se.magnus.api.composite.product.ReviewSummary;
 import se.magnus.api.core.product.Product;
 import se.magnus.api.core.recommendation.Recommendation;
 import se.magnus.api.core.review.Review;
-import se.magnus.api.exceptions.NotFoundException;
-import se.magnus.microservices.composite.product.services.ProductCompositeIntegration;
 import se.magnus.util.http.ServiceUtil;
 
 import java.util.ArrayList;
