@@ -24,7 +24,8 @@ import static se.magnus.api.event.Event.Type.DELETE;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT, properties = {
 		"spring.cloud.stream.defaultBinder=rabbit",
-		"logging.level.se.magnus=DEBUG"})
+		"logging.level.se.magnus=DEBUG",
+		"eureka.client.enabled=false"})
 class ReviewServiceApplicationTests extends MySqlTestBase {
 
 	@Autowired
