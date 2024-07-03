@@ -127,7 +127,7 @@ services:
       - KAFKA_ADVERTISED_HOST_NAME=zookeeper
 
   eureka:
-    build: spring-cloud/eureka-server
+    build: spring-cloud/eurekaserver
     mem_limit: 512m
     ports:
       - "8761:8761"
