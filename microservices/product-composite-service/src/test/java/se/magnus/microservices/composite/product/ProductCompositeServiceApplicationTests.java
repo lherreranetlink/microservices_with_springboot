@@ -9,9 +9,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import se.magnus.api.composite.product.ProductAggregate;
-import se.magnus.api.composite.product.RecommendationSummary;
-import se.magnus.api.composite.product.ReviewSummary;
 import se.magnus.api.core.product.Product;
 import se.magnus.api.core.review.Review;
 import se.magnus.api.core.recommendation.Recommendation;
@@ -19,14 +16,11 @@ import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.api.exceptions.NotFoundException;
 import se.magnus.microservices.composite.product.services.ProductCompositeIntegration;
 
-import java.util.Arrays;
-
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static reactor.core.publisher.Mono.just;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT, properties = {"eureka.client.enabled=false"})
 class ProductCompositeServiceApplicationTests {
